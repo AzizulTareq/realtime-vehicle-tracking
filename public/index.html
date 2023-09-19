@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vehicle Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.0/mapbox-gl.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"
+      integrity="sha512-zoJXRvW2gC8Z0Xo3lBbao5+AS3g6YWr5ztKqaicua11xHo+AvE1b0lT9ODgrHTmNUxeCw0Ry4BGRYZfXu70weg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <div id="sidebar">
+      <h2>Vehicle List</h2>
+      <ul id="vehicle-list"></ul>
+      <div id="filters">
+        <label for="status-filter">Idle:</label>
+        <input
+          type="radio"
+          id="status-moving"
+          name="status-filter"
+          value="moving"
+          checked
+        />
+        <label for="status-idle">Moving:</label>
+        <input
+          type="radio"
+          id="status-idle"
+          name="status-filter"
+          value="idle"
+        />
+      </div>
+    </div>
+    <div id="map-container">
+      <div id="map"></div>
+    </div>
+
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoiYXppenVsdGFyZXEiLCJhIjoiY2xtbjkzaTRrMHBvczJsdGJzMjUzbGZseCJ9.yGpY5oLk2F64sUBUmuVXuQ";
+
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [90.406, 23.8103],
+        zoom: 12,
+      });
+
+      const markers = {};
+      let status = "";
+
+      function createMarkers(data) {
+        data
+          .filter((car) => car.status !== status)
+          .forEach((marker) => {
+            if (markers[marker.id]) {
+              markers[marker.id].remove();
+            }
+
+            const carMarker = document.createElement("div");
+            carMarker.className = "custom-marker";
+
+            const markerImage = document.createElement("img");
+            markerImage.src = "images/redcar.png";
+            markerImage.className = "custom-marker-img";
+
+            carMarker.appendChild(markerImage);
+
+            const newMarker = new mapboxgl.Marker({ element: carMarker })
+              .setLngLat([marker.lng, marker.lat])
+              .addTo(map);
+
+            markers[marker.id] = newMarker;
+          });
+      }
+
+      const radioButtons = document.querySelectorAll(
+        'input[name="status-filter"]'
+      );
+      radioButtons.forEach((radio) => {
+        radio.addEventListener("change", function () {
+          status = this.value;
+        });
+      });
+
+      const connection = new WebSocket("ws://localhost:80");
+
+      connection.onmessage = (e) => {
+        const markerData = JSON.parse(e.data);
+
+        Object.values(markers).forEach((marker) => {
+          marker.remove();
+        });
+        createMarkers(markerData);
+      };
+    </script>
+  </body>
+</html>
