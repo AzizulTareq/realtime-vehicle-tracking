@@ -7,7 +7,7 @@ body {
 }
 
 .sidebar {
-  background-color: #ffff;
+  background: #ffff;
   padding: 20px;
   box-sizing: border-box;
   flex: 1;
@@ -89,7 +89,7 @@ td {
 
 th {
   padding: 15px 10px;
-  background-color: #1a1334;
+  background-color: #3a3156;
   color: #ffff;
 }
 
@@ -98,4 +98,17 @@ th {
   td {
     margin: 20px;
   }
+}
+
+#acquisitions-container {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  margin-top: 20px;
+}
+
+#acquisitions {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }

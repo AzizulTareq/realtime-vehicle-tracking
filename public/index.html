@@ -15,6 +15,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="sidebar">
@@ -58,9 +59,12 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody id="markerTableBody">
-          </tbody>
+          <tbody id="markerTableBody"></tbody>
         </table>
+      </div>
+
+      <div id="acquisitions-container">
+        <canvas id="acquisitions"></canvas>
       </div>
     </div>
     <div class="map-container">
@@ -125,7 +129,7 @@
             <td>${marker.id}</td>
             <td>${marker.lat.toFixed(4)}</td>
             <td>${marker.lng.toFixed(4)}</td>
-            <td>${marker.distance}</td>
+            <td>${marker.distance.toFixed(2)} Km</td>
             <td>${marker.status}</td>
         `;
           tableBody.appendChild(row);
@@ -141,6 +145,31 @@
         });
       });
 
+      // graph code
+      function createChart(data) {
+        const canvas = document.getElementById("acquisitions");
+        const ctx = canvas.getContext("2d");
+
+        const chart = {
+          type: "bar",
+          data: {
+            labels: data.map((row) => row.id),
+            datasets: [
+              {
+                label: "Acquisitions by Id",
+                data: data.map((row) => row.distance),
+                backgroundColor: "#B7A8E9",
+              },
+            ],
+          },
+        };
+
+        const barChart = new Chart(ctx, {
+          type: chart.type,
+          data: chart.data,
+        });
+      }
+
       const connection = new WebSocket("ws://localhost:80");
 
       connection.onmessage = (e) => {
@@ -151,6 +180,7 @@
         });
         generateMarkerTable(markerData);
         createMarkers(markerData);
+        createChart(markerData);
       };
     </script>
   </body>

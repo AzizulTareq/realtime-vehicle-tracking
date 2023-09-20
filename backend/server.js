@@ -10,12 +10,27 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 var markerData = [
-  { id: 1, lat: 23.8103, lng: 90.4125, distance: 58, status: "Moving" },
-  { id: 2, lat: 23.8103, lng: 90.4125, distance: 58, status: "Moving" },
-  { id: 3, lat: 23.8103, lng: 90.4125, distance: 58, status: "idle" },
-  { id: 4, lat: 23.8759, lng: 90.3904, distance: 25, status: "Moving" },
-  { id: 5, lat: 23.7465, lng: 90.376, distance: 42, status: "idle" },
+  { id: 1, lat: 23.8103, lng: 90.4125, distance: 0, status: "Moving" },
+  { id: 2, lat: 23.8103, lng: 90.4125, distance: 0, status: "Moving" },
+  { id: 3, lat: 23.8103, lng: 90.4125, distance: 0, status: "idle" },
+  { id: 4, lat: 23.8759, lng: 90.3904, distance: 0, status: "Moving" },
+  { id: 5, lat: 23.7465, lng: 90.376, distance: 0, status: "idle" },
 ];
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  return distance;
+}
 
 wss.on("connection", (ws) => {
   ws.on("message", (message) => {
@@ -25,14 +40,23 @@ wss.on("connection", (ws) => {
   var interval = setInterval(function () {
     markerData = markerData.map((marker) => {
       if (marker.status === "Moving") {
+        const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
+        const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
+        const distanceMoved = calculateDistance(
+          marker.lat,
+          marker.lng,
+          newLat,
+          newLng
+        );
+
         return {
           ...marker,
-          lat: marker.lat + (Math.random() - 0.5) * 0.01,
-          lng: marker.lng + (Math.random() - 0.5) * 0.01,
+          lat: newLat,
+          lng: newLng,
+          distance: marker.distance + distanceMoved, // Update the distance
         };
       } else {
         return marker;
-        3;
       }
     });
 
