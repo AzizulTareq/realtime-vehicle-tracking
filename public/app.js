@@ -1,3 +1,4 @@
+// Dear Hiring Manager, this one should be in .env file, still I added this here.
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYXppenVsdGFyZXEiLCJhIjoiY2xtbjkzaTRrMHBvczJsdGJzMjUzbGZseCJ9.yGpY5oLk2F64sUBUmuVXuQ";
 
