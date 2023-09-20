@@ -34,22 +34,22 @@ To run the repository locally, follow these steps:
 
 Create a simple web-based dashboard that can display real-time information about multiple vehicles. You can mock the data or use any public API for demonstration purposes.
 
-### Front-end
+### ✔️ Front-end
 - Use HTML, CSS, and JavaScript to design the user interface.
 - Show a map with vehicle markers.
 - Display a list of vehicles and their current status (moving, idle, etc.).
 
-### Back-end (Node.js)
+### ✔️ Back-end (Node.js)
 - Create mock APIs that the frontend can call to update vehicle positions and statuses.
 
-### Real-time Updates
+### ✔️ Real-time Updates
 - Use Websockets or any real-time technology to update vehicle markers and statuses on the map.
 
-### Filters
-- Add filters to only show vehicles that meet certain conditions (e.g., moving, idle).
+### ✔️ Filters
+- Add filters to only show vehicles that meet certain conditions (e.g., moving, idle). Both table and vehicles on the map are filterable.
 
-### Bonus
+### ✔️ Bonus
 - Include a simple graph or chart to show metrics like distance covered by each vehicle over time.
 
-### Extra
+### ✔️ Extra
 - Vehicles goes out of screen, so by clicking on the table row, a vehicle's location could be centered on the screen.
