@@ -113,7 +113,7 @@ function updateChart(data) {
 createInitialChart([]);
 
 // websocket connection, getting the realtime data from backend
-const connection = new WebSocket("ws://tareq-vehicle-tracking.onrender.com:80");
+const connection = new WebSocket("wss://tareq-vehicle-tracking.onrender.com:80");
 
 connection.onmessage = (e) => {
   const markerData = JSON.parse(e.data);
