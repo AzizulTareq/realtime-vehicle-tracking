@@ -3,6 +3,7 @@ const express = require("express");
 const WebSocket = require("ws");
 const app = express();
 const port = 80;
+const handleCalculateDistance = require("./utils/distanceCalculator");
 
 app.use("/", express.static("public"));
 
@@ -17,21 +18,6 @@ var markerData = [
   { id: 5, lat: 23.7465, lng: 90.376, distance: 0, status: "Idle" },
 ];
 
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) *
-      Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c;
-  return distance;
-}
-
 wss.on("connection", (ws) => {
   ws.on("message", (message) => {
     console.log(`Received message => ${message}`);
@@ -42,7 +28,7 @@ wss.on("connection", (ws) => {
       if (marker.status === "Moving") {
         const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
         const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
-        const distanceMoved = calculateDistance(
+        const distanceMoved = handleCalculateDistance(
           marker.lat,
           marker.lng,
           newLat,
@@ -53,7 +39,7 @@ wss.on("connection", (ws) => {
           ...marker,
           lat: newLat,
           lng: newLng,
-          distance: marker.distance + distanceMoved, 
+          distance: marker.distance + distanceMoved,
         };
       } else {
         return marker;

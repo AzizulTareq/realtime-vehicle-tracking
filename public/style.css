@@ -103,6 +103,10 @@ td {
   cursor: pointer;
 }
 
+tr:hover {
+  background-color: #dcd6ef;
+}
+
 th {
   background-color: #3a3156;
   color: #ffff;
