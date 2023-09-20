@@ -14,13 +14,21 @@ body {
   min-width: 300px;
 }
 
-.filter {
-  padding-bottom: 10px;
+.map-container {
+  flex: 2;
+  min-width: 66.66%;
 }
 
 .map-container {
   flex: 2;
   min-width: 66.66%;
+}
+
+@media (min-width: 900px) and (max-width: 1440px) {
+  .map-container {
+    min-width: 50%;
+    flex: 1;
+  }
 }
 
 #map {
@@ -53,6 +61,12 @@ body {
   left: -12px;
 }
 
+.highlight {
+  height: 100px;
+  width: 100px;
+  background-color: yellow;
+}
+
 .radio-input {
   font-size: 18px;
   font-weight: 600;
@@ -72,6 +86,7 @@ body {
   overflow-x: auto;
   background-color: #ffff;
   border-radius: 10px;
+  margin-top: 20px;
   border: 1px solid #ddd;
 }
 
@@ -85,10 +100,10 @@ td {
   padding: 15px 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
 
 th {
-  padding: 15px 10px;
   background-color: #3a3156;
   color: #ffff;
 }
@@ -96,7 +111,6 @@ th {
 @media (max-width: 600px) {
   th,
   td {
-    margin: 20px;
   }
 }
 

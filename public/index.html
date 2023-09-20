@@ -19,7 +19,7 @@
   </head>
   <body>
     <div class="sidebar">
-      <h2>Filter By Status</h2>
+      <h4>Filter By Status</h4>
       <ul id="vehicle-list"></ul>
       <div class="filter">
         <div class="radio-input">
@@ -44,7 +44,7 @@
             type="radio"
             id="status-idle"
             name="status-filter"
-            value="idle"
+            value="Idle"
           /><label for="status-idle">Moving</label>
         </div>
       </div>
@@ -62,7 +62,6 @@
           <tbody id="markerTableBody"></tbody>
         </table>
       </div>
-
       <div id="acquisitions-container">
         <canvas id="acquisitions"></canvas>
       </div>
@@ -75,15 +74,18 @@
       mapboxgl.accessToken =
         "pk.eyJ1IjoiYXppenVsdGFyZXEiLCJhIjoiY2xtbjkzaTRrMHBvczJsdGJzMjUzbGZseCJ9.yGpY5oLk2F64sUBUmuVXuQ";
 
+      const markers = {};
+      let status = "all";
+      let centerLat = 23.8103;
+      let centerLng = 90.406;
+      let highlightedMarker = 0;
+
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/mapbox/streets-v11",
-        center: [90.406, 23.8103],
+        center: [centerLng, centerLat],
         zoom: 12,
       });
-
-      const markers = {};
-      let status = "all";
 
       function createMarkers(data) {
         data
@@ -104,7 +106,7 @@
             const textContainer = document.createElement("div");
             textContainer.className = "custom-marker-text";
 
-            if (marker.status === "idle") {
+            if (marker.status === "Idle") {
               textContainer.innerText = "I";
             } else {
               textContainer.innerText = "M";
@@ -123,17 +125,22 @@
       function generateMarkerTable(data) {
         const tableBody = document.getElementById("markerTableBody");
         tableBody.innerHTML = "";
-        data.forEach((marker) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
+        data
+          .filter((car) => car.status !== status)
+          .forEach((marker) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
             <td>${marker.id}</td>
             <td>${marker.lat.toFixed(4)}</td>
             <td>${marker.lng.toFixed(4)}</td>
             <td>${marker.distance.toFixed(2)} Km</td>
             <td>${marker.status}</td>
         `;
-          tableBody.appendChild(row);
-        });
+            tableBody.appendChild(row);
+            row.onclick = function () {
+              map.setCenter([marker.lng, marker.lat]);
+            };
+          });
       }
 
       const radioButtons = document.querySelectorAll(
@@ -146,29 +153,37 @@
       });
 
       // graph code
-      function createChart(data) {
+      let barChart;
+
+      function createInitialChart(data) {
         const canvas = document.getElementById("acquisitions");
         const ctx = canvas.getContext("2d");
 
-        const chart = {
-          type: "bar",
-          data: {
-            labels: data.map((row) => row.id),
-            datasets: [
-              {
-                label: "Acquisitions by Id",
-                data: data.map((row) => row.distance),
-                backgroundColor: "#B7A8E9",
-              },
-            ],
-          },
+        const chartData = {
+          labels: [],
+          datasets: [
+            {
+              label: "Acquisitions by Distance",
+              data: [],
+              backgroundColor: "#B7A8E9",
+            },
+          ],
         };
 
-        const barChart = new Chart(ctx, {
-          type: chart.type,
-          data: chart.data,
+        barChart = new Chart(ctx, {
+          type: "bar",
+          data: chartData,
         });
       }
+
+      function updateChart(data) {
+        const chartData = barChart.data;
+        chartData.labels = data.map((row) => row.id);
+        chartData.datasets[0].data = data.map((row) => row.distance);
+        barChart.update();
+      }
+
+      createInitialChart([]);
 
       const connection = new WebSocket("ws://localhost:80");
 
@@ -180,7 +195,7 @@
         });
         generateMarkerTable(markerData);
         createMarkers(markerData);
-        createChart(markerData);
+        updateChart(markerData);
       };
     </script>
   </body>
