@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Vehicle Dashboard</title>
+    <title>Vehicle Tacking Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <link
@@ -19,7 +19,7 @@
   </head>
   <body>
     <div class="sidebar">
-      <h4>Filter By Status</h4>
+      <h3>Filter By Status</h3>
       <ul id="vehicle-list"></ul>
       <div class="filter">
         <div class="radio-input">
@@ -47,6 +47,10 @@
             value="Idle"
           /><label for="status-idle">Moving</label>
         </div>
+      </div>
+      <div class="note">
+        Note: Vehicles goes out of screen, by clicking on a table row, we can
+        replace the center of map by the location of that vehicle.
       </div>
       <div class="table-container">
         <table id="markerTable">

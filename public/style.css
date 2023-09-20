@@ -14,6 +14,16 @@ body {
   min-width: 300px;
 }
 
+.filter {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 400px) {
+  .filter {
+    display: block;
+  }
+}
 .map-container {
   flex: 2;
   min-width: 66.66%;
@@ -61,25 +71,32 @@ body {
   left: -12px;
 }
 
-.highlight {
-  height: 100px;
-  width: 100px;
-  background-color: yellow;
+h3 {
+  margin: 0px;
+  margin-top: 15px;
+  text-align: center;
 }
 
 .radio-input {
   font-size: 18px;
   font-weight: 600;
-  margin: 7px 0px;
+  margin: 10px 20px;
 }
 
-.radio-input input[type="radio"] {
-  margin-right: 10px;
-}
-
-.radio-input input[type="radio"] {
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   width: 17px;
   height: 17px;
+  margin-right: 10px;
+  border: 2px solid #8a6de7;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked {
+  background-color: #8a6de7;
 }
 
 .table-container {
@@ -101,6 +118,7 @@ td {
   text-align: left;
   border-bottom: 1px solid #ddd;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 tr:hover {
@@ -129,4 +147,9 @@ th {
   width: 100%;
   max-width: 100%;
   height: auto;
+}
+
+.note {
+  margin: 15px 5px;
+  color: grey;
 }
