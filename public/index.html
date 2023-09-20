@@ -35,7 +35,7 @@
             type="radio"
             id="status-moving"
             name="status-filter"
-            value="moving"
+            value="Moving"
           /><label for="status-filter">Idle</label>
         </div>
         <div class="radio-input">
@@ -59,7 +59,6 @@
             </tr>
           </thead>
           <tbody id="markerTableBody">
-            <!-- Table rows will be added dynamically here -->
           </tbody>
         </table>
       </div>
@@ -98,19 +97,15 @@
             markerImage.className = "custom-marker-img";
 
             carMarker.appendChild(markerImage);
-
-            // Create a div for the text
             const textContainer = document.createElement("div");
             textContainer.className = "custom-marker-text";
 
-            // Add the letter "I" to the text container
             if (marker.status === "idle") {
               textContainer.innerText = "I";
             } else {
               textContainer.innerText = "M";
             }
 
-            // Append the text container to the carMarker
             carMarker.appendChild(textContainer);
 
             const newMarker = new mapboxgl.Marker({ element: carMarker })

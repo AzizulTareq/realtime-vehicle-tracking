@@ -10,12 +10,12 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 var markerData = [
-  { id: 1, lat: 23.8103, lng: 90.4125, distance: 58, status: "moving" },
-  { id: 2, lat: 23.8103, lng: 90.4125, distance: 58, status: "moving" },
+  { id: 1, lat: 23.8103, lng: 90.4125, distance: 58, status: "Moving" },
+  { id: 2, lat: 23.8103, lng: 90.4125, distance: 58, status: "Moving" },
   { id: 3, lat: 23.8103, lng: 90.4125, distance: 58, status: "idle" },
-  { id: 4, lat: 23.8759, lng: 90.3904, distance: 25, status: "moving" },
-  { id: 5, lat: 23.7465, lng: 90.3760, distance: 42, status: "idle" },
-]
+  { id: 4, lat: 23.8759, lng: 90.3904, distance: 25, status: "Moving" },
+  { id: 5, lat: 23.7465, lng: 90.376, distance: 42, status: "idle" },
+];
 
 wss.on("connection", (ws) => {
   ws.on("message", (message) => {
@@ -24,7 +24,7 @@ wss.on("connection", (ws) => {
 
   var interval = setInterval(function () {
     markerData = markerData.map((marker) => {
-      if (marker.status === "moving") {
+      if (marker.status === "Moving") {
         return {
           ...marker,
           lat: marker.lat + (Math.random() - 0.5) * 0.01,
