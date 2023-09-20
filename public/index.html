@@ -17,28 +17,54 @@
     ></script>
   </head>
   <body>
-    <div id="sidebar">
-      <h2>Vehicle List</h2>
+    <div class="sidebar">
+      <h2>Filter By Status</h2>
       <ul id="vehicle-list"></ul>
-      <div id="filters">
-        <label for="status-filter">Idle:</label>
-        <input
-          type="radio"
-          id="status-moving"
-          name="status-filter"
-          value="moving"
-          checked
-        />
-        <label for="status-idle">Moving:</label>
-        <input
-          type="radio"
-          id="status-idle"
-          name="status-filter"
-          value="idle"
-        />
+      <div class="filter">
+        <div class="radio-input">
+          <input
+            type="radio"
+            id="status-moving"
+            name="status-filter"
+            value="all"
+            checked
+          /><label for="status-filter">All</label>
+        </div>
+        <div class="radio-input">
+          <input
+            type="radio"
+            id="status-moving"
+            name="status-filter"
+            value="moving"
+          /><label for="status-filter">Idle</label>
+        </div>
+        <div class="radio-input">
+          <input
+            type="radio"
+            id="status-idle"
+            name="status-filter"
+            value="idle"
+          /><label for="status-idle">Moving</label>
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="markerTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Distance</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="markerTableBody">
+            <!-- Table rows will be added dynamically here -->
+          </tbody>
+        </table>
       </div>
     </div>
-    <div id="map-container">
+    <div class="map-container">
       <div id="map"></div>
     </div>
 
@@ -54,7 +80,7 @@
       });
 
       const markers = {};
-      let status = "";
+      let status = "all";
 
       function createMarkers(data) {
         data
@@ -73,12 +99,42 @@
 
             carMarker.appendChild(markerImage);
 
+            // Create a div for the text
+            const textContainer = document.createElement("div");
+            textContainer.className = "custom-marker-text";
+
+            // Add the letter "I" to the text container
+            if (marker.status === "idle") {
+              textContainer.innerText = "I";
+            } else {
+              textContainer.innerText = "M";
+            }
+
+            // Append the text container to the carMarker
+            carMarker.appendChild(textContainer);
+
             const newMarker = new mapboxgl.Marker({ element: carMarker })
               .setLngLat([marker.lng, marker.lat])
               .addTo(map);
 
             markers[marker.id] = newMarker;
           });
+      }
+
+      function generateMarkerTable(data) {
+        const tableBody = document.getElementById("markerTableBody");
+        tableBody.innerHTML = "";
+        data.forEach((marker) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${marker.id}</td>
+            <td>${marker.lat.toFixed(4)}</td>
+            <td>${marker.lng.toFixed(4)}</td>
+            <td>${marker.distance}</td>
+            <td>${marker.status}</td>
+        `;
+          tableBody.appendChild(row);
+        });
       }
 
       const radioButtons = document.querySelectorAll(
@@ -98,6 +154,7 @@
         Object.values(markers).forEach((marker) => {
           marker.remove();
         });
+        generateMarkerTable(markerData);
         createMarkers(markerData);
       };
     </script>

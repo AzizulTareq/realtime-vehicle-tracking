@@ -13,7 +13,9 @@ var markerData = [
   { id: 1, lat: 23.8103, lng: 90.4125, distance: 58, status: "moving" },
   { id: 2, lat: 23.8103, lng: 90.4125, distance: 58, status: "moving" },
   { id: 3, lat: 23.8103, lng: 90.4125, distance: 58, status: "idle" },
-];
+  { id: 4, lat: 23.8759, lng: 90.3904, distance: 25, status: "moving" },
+  { id: 5, lat: 23.7465, lng: 90.3760, distance: 42, status: "idle" },
+]
 
 wss.on("connection", (ws) => {
   ws.on("message", (message) => {
