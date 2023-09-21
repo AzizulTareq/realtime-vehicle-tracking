@@ -23,14 +23,14 @@ wss.on("connection", (ws) => {
     console.log(`Received message => ${message}`);
   });
 
+  // randomizing the status and latitude and longitude
   var interval = setInterval(function () {
     markerData = markerData.map((marker) => {
-      // Randomly choose between "Idle" and "Moving"
       const newStatus = Math.random() < 0.5 ? "Idle" : "Moving";
-
+      // calculating distance and randomizing lat, lng only if vehicle is moving.
       if (newStatus === "Moving") {
-        const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
-        const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
+        const newLat = marker.lat + (Math.random() - 0.5) * 0.001;
+        const newLng = marker.lng + (Math.random() - 0.5) * 0.001;
         const distanceMoved = handleCalculateDistance(
           marker.lat,
           marker.lng,
@@ -43,12 +43,12 @@ wss.on("connection", (ws) => {
           lat: newLat,
           lng: newLng,
           distance: marker.distance + distanceMoved,
-          status: newStatus, // Update the status to "Moving"
+          status: newStatus,
         };
       } else {
         return {
           ...marker,
-          status: newStatus, // Update the status to "Idle"
+          status: newStatus,
         };
       }
     });
