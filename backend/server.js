@@ -10,6 +10,7 @@ app.use("/", express.static("public"));
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+// data which changes after every 3 seconds
 var markerData = [
   { id: 1, lat: 23.8103, lng: 90.4125, distance: 0, status: "Moving" },
   { id: 2, lat: 23.8103, lng: 90.4125, distance: 0, status: "Moving" },
@@ -29,8 +30,8 @@ wss.on("connection", (ws) => {
       const newStatus = Math.random() < 0.5 ? "Idle" : "Moving";
       // calculating distance and randomizing lat, lng only if vehicle is moving.
       if (newStatus === "Moving") {
-        const newLat = marker.lat + (Math.random() - 0.5) * 0.001;
-        const newLng = marker.lng + (Math.random() - 0.5) * 0.001;
+        const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
+        const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
         const distanceMoved = handleCalculateDistance(
           marker.lat,
           marker.lng,
@@ -55,7 +56,7 @@ wss.on("connection", (ws) => {
 
     const jsonData = JSON.stringify(markerData);
     ws.send(jsonData);
-  }, 1000);
+  }, 3000);
 
   ws.on("close", function close() {
     clearInterval(interval);
