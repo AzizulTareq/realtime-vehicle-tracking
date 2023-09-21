@@ -25,7 +25,10 @@ wss.on("connection", (ws) => {
 
   var interval = setInterval(function () {
     markerData = markerData.map((marker) => {
-      if (marker.status === "Moving") {
+      // Randomly choose between "Idle" and "Moving"
+      const newStatus = Math.random() < 0.5 ? "Idle" : "Moving";
+
+      if (newStatus === "Moving") {
         const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
         const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
         const distanceMoved = handleCalculateDistance(
@@ -40,9 +43,13 @@ wss.on("connection", (ws) => {
           lat: newLat,
           lng: newLng,
           distance: marker.distance + distanceMoved,
+          status: newStatus, // Update the status to "Moving"
         };
       } else {
-        return marker;
+        return {
+          ...marker,
+          status: newStatus, // Update the status to "Idle"
+        };
       }
     });
 
