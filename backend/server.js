@@ -28,7 +28,7 @@ wss.on("connection", (ws) => {
   var interval = setInterval(function () {
     markerData = markerData.map((marker) => {
       // calculating distance and randomizing lat, lng only if vehicle is moving.
-      if (newStatus === "Moving") {
+      if (marker.status === "Moving") {
         const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
         const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
         // calculating distance using handleCalculateDistance function
