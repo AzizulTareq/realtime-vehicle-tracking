@@ -32,6 +32,7 @@ wss.on("connection", (ws) => {
       if (newStatus === "Moving") {
         const newLat = marker.lat + (Math.random() - 0.5) * 0.01;
         const newLng = marker.lng + (Math.random() - 0.5) * 0.01;
+        // calculating distance using handleCalculateDistance function
         const distanceMoved = handleCalculateDistance(
           marker.lat,
           marker.lng,
