@@ -113,6 +113,7 @@ function updateChart(data) {
 createInitialChart([]);
 
 // websocket connection, getting the realtime data from backend
+// to run it locally replace the link with "ws://localhost:80"
 const connection = new WebSocket("wss://tareq-vehicle-tracking.onrender.com");
 
 connection.onmessage = (e) => {

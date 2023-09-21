@@ -27,6 +27,7 @@ To run the repository locally, follow these steps:
     ```bash
     public/index.html
     ```
+6. In index.html file, line no 117: replace the production url with "ws://localhost:80"
 
 ## Completed Features
 
